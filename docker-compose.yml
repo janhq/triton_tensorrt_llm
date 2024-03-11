@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  converter:
+    image: ghcr.io/janhq/triton_tensorrt_llm:engine_build_89_90_5955b8afbad2ddcc3156202b16c567e94c52248f
+    command: /tmp/tensorrt_llm_converter.sh
+    volumes:
+      - ./engine:/engine
+      - ./tokenizer:/tokenizer
+      - ./checkpoint:/checkpoint
+      - ./tensorrt_llm_converter.sh:/tmp/tensorrt_llm_converter.sh
+    env_file:
+      - .env
+    working_dir: /app/tensorrt_llm
+    tmpfs:
+      - /tmp:exec
+    ipc: host
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+
+  triton:
+    image: ghcr.io/janhq/triton_tensorrt_llm:engine_build_89_90_41fe3a6a9daa12c64403e084298c6169b07d489d
+    command: /tmp/triton_init.sh
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8002:8002"
+    volumes:
+      - ./engine:/engine
+      - ./triton:/triton
+      - ./tensorrtllm_backend/tools:/app/tools
+      - ./tensorrtllm_backend/all_models/inflight_batcher_llm:/model
+      - ./tokenizer:/tokenizer
+      - ./triton_init.sh:/tmp/triton_init.sh
+    working_dir: /app/
+    depends_on:
+      converter:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]

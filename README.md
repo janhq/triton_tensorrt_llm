@@ -15,10 +15,17 @@
 - Model:
   - [jan-hq/stealth-v1.2](https://huggingface.co/jan-hq/stealth-v1.2)
 
+## 2. Overview
+
+![Compose flow](/assets/images/triton_tensorrtllm_compose.jpg)
+
+- There are 2 components:
+  - `converter` with public image: `ghcr.io/janhq/triton_tensorrt_llm:engine_build_89_90_5955b8afbad2ddcc3156202b16c567e94c52248f`
+  - `triton` with public image:`ghcr.io/janhq/triton_tensorrt_llm:engine_build_89_90_41fe3a6a9daa12c64403e084298c6169b07d489d`
+
 ## 2. Steps
 
-- Run the command for automated converter and triton setup
-  ![Compose flow](/assets/images/triton_tensorrtllm_compose.jpg)
+- Run command
 
 ```bash
 docker compose up -d

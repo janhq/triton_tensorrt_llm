@@ -10,8 +10,8 @@
 ## 1. Tested environments
 
 - OS with GPU:
-  - [x] Linux with 4090
-  - [ ] Linux with 3090
+  - [x] Linux/ WSL with 4090
+  - [x] Linux/ WSL with 3090
 - Model:
   - [jan-hq/stealth-v1.2](https://huggingface.co/jan-hq/stealth-v1.2)
 

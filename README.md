@@ -17,11 +17,19 @@
 
 ## 2. Overview
 
-![Compose flow](/assets/images/triton_tensorrtllm_compose.jpg)
+### The architecture
 
-- There are 2 components:
-  - `converter` with public image: `ghcr.io/janhq/triton_tensorrt_llm:engine_build_89_90_5955b8afbad2ddcc3156202b16c567e94c52248f`
-  - `triton` with public image:`ghcr.io/janhq/triton_tensorrt_llm:engine_build_89_90_41fe3a6a9daa12c64403e084298c6169b07d489d`
+![High level architecture](/assets/images/architecture.jpg)
+
+### There are 3 components:
+
+- `converter` with public image: `ghcr.io/janhq/triton_tensorrt_llm:engine_build_89_90_5955b8afbad2ddcc3156202b16c567e94c52248f`
+- `triton` with public image:`ghcr.io/janhq/triton_tensorrt_llm:engine_build_89_90_41fe3a6a9daa12c64403e084298c6169b07d489d`
+- `proxy` from [openai_trtllm](https://github.com/janhq/openai_trtllm) with public image: `ghcr.io/janhq/triton_tensorrt_llm:proxy_openai_2ec5869dc61362118ebef7f097e00d2da0cc0f69`
+
+### The `converter` and `triton` interaction
+
+![Compose flow](/assets/images/triton_tensorrtllm_compose.jpg)
 
 ## 2. Steps
 

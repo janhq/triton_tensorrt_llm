@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   converter:
@@ -22,9 +22,9 @@ services:
       resources:
         reservations:
           devices:
-          - driver: nvidia
-            count: all
-            capabilities: [gpu]
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 
   triton:
     image: ghcr.io/janhq/triton_tensorrt_llm:engine_build_89_90_41fe3a6a9daa12c64403e084298c6169b07d489d
@@ -32,9 +32,9 @@ services:
     env_file:
       - .env
     ports:
-      - "8000:8000"
-      - "8001:8001"
-      - "8002:8002"
+      - "8000"
+      - "8001"
+      - "8002"
     volumes:
       - ./engine:/engine
       - ./triton:/triton
@@ -50,6 +50,23 @@ services:
       resources:
         reservations:
           devices:
-          - driver: nvidia
-            count: all
-            capabilities: [gpu]
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  proxy:
+    image: ghcr.io/janhq/triton_tensorrt_llm:proxy_openai_2ec5869dc61362118ebef7f097e00d2da0cc0f69
+    command:
+      [
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "3000",
+        "--triton-endpoint",
+        "http://triton:8001",
+      ]
+    ports:
+      - "3000:3000"
+    depends_on:
+      - triton
+    restart: always

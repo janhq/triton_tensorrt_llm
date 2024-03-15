@@ -42,6 +42,7 @@ docker compose up -d
 - Test API
 
 ```
+# Generate stream from Triton
 curl --location 'http://localhost:8000/v2/models/tensorrt_llm_bls/generate_stream' \
 --header 'Accept: text/event-stream' \
 --header 'Content-Type: application/json' \
@@ -54,6 +55,7 @@ curl --location 'http://localhost:8000/v2/models/tensorrt_llm_bls/generate_strea
     }
 }'
 
+# Generate no-stream from Triton
 curl --location 'http://localhost:8000/v2/models/tensorrt_llm_bls/generate' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -63,5 +65,20 @@ curl --location 'http://localhost:8000/v2/models/tensorrt_llm_bls/generate' \
         "temperature": 0,
         "max_tokens": 20
     }
+}'
+# OpenAI compatible API from the proxy
+curl --location 'http://localhost:3000/v1/chat/completions' \
+--header 'Content-Type: application/json' \
+--data '{
+    "messages": [
+        {
+            "role": "user",
+            "content": "Who is Jensen Huang"
+        }
+    ],
+    "stream": true,
+    "model": "tensorrt_llm_bls",
+    "max_tokens": 2048,
+    "temperature": 0.7
 }'
 ```
